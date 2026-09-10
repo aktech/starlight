@@ -1,6 +1,8 @@
 ---
 /**
- * Mounts mermaid-doodle on pages that contain a mermaid fence.
+ * Mounts mermaid-doodle on every page. The renderer looks for a diagram
+ * before it does anything else, so pages with no mermaid fence never pay
+ * for resolving mermaid.
  *
  * Expressive Code renders the fence as a <pre data-language="mermaid">, which
  * mermaid-doodle picks up on its own. Colours come from the --doodle-*
@@ -12,7 +14,5 @@
   import { createRenderer } from 'mermaid-doodle';
   import 'mermaid-doodle/styles.css';
 
-  if (document.querySelector('[data-language="mermaid"]')) {
-    createRenderer().mount();
-  }
+  createRenderer().mount();
 </script>
