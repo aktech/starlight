@@ -84,6 +84,18 @@
   --sl-text-h4: 1.125rem;
   --sl-text-h5: 1rem;
   --nbr-text-eyebrow: 0.6875rem;
+
+  /* ── Mermaid diagrams (mermaid-doodle) ──────────────────────────────────── */
+  --doodle-accent: var(--nbr-primary);
+  --doodle-node-bg: var(--nbr-muted);
+  --doodle-node-text: var(--nbr-foreground);
+  --doodle-alt-bg: var(--nbr-muted);
+  --doodle-alt-border: var(--nbr-border);
+  --doodle-cluster-bg: var(--nbr-background);
+  --doodle-cluster-border: var(--nbr-border);
+  --doodle-note-bg: var(--nbr-muted);
+  --doodle-text: var(--nbr-foreground);
+  --doodle-edge-label-bg: var(--nbr-background);
 }
 
 :root[data-has-sidebar] {
