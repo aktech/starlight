@@ -18,20 +18,22 @@ test('redraws the diagram when the theme changes', async ({ page }) => {
     .not.toBe(before);
 });
 
-test('reads the diagram accent from this theme, not a hardcoded literal', async ({
-  page,
-}) => {
+test('maps the diagram accent to the site primary token', async ({ page }) => {
   // Regression guard: the mapping in theme.css must alias --doodle-accent to
-  // this site's own token (var(--nbr-primary)) rather than a literal color
-  // value copied in from somewhere else. A hardcoded literal would not track
-  // this theme's palette or its light/dark switch.
+  // --nbr-primary, this site's own accent token, not merely to some
+  // non-empty value. Reading both through getComputedStyle the same way
+  // keeps their formats directly comparable, so this catches a mapping
+  // pointed at the wrong token, not only an empty or literal one.
   await page.goto('/reference/diagrams/');
   await expect(page.locator('.doodle-wrap svg')).toBeVisible();
-  const accent = await page.evaluate(() =>
-    getComputedStyle(document.documentElement)
-      .getPropertyValue('--doodle-accent')
-      .trim(),
-  );
+  const [accent, primary] = await page.evaluate(() => {
+    const style = getComputedStyle(document.documentElement);
+    return [
+      style.getPropertyValue('--doodle-accent').trim(),
+      style.getPropertyValue('--nbr-primary').trim(),
+    ];
+  });
   expect(accent).not.toBe('');
+  expect(accent).toBe(primary);
   expect(accent).not.toBe('#5b3cc4');
 });
