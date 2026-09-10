@@ -4,74 +4,15 @@
  *
  * Expressive Code renders the fence as a <pre data-language="mermaid">, which
  * mermaid-doodle picks up on its own. Colours come from the --doodle-*
- * properties in theme.css, so nothing is configured here beyond the format
- * bridge below.
+ * properties in theme.css, so nothing is configured here.
  */
 ---
 
 <script>
-  import { createRenderer, watchTheme } from 'mermaid-doodle';
+  import { createRenderer } from 'mermaid-doodle';
   import 'mermaid-doodle/styles.css';
 
   if (document.querySelector('[data-language="mermaid"]')) {
-    /**
-     * mermaid-doodle reads each --doodle-* value as plain text and hands it
-     * to Mermaid, which only parses hex, rgb()/rgba(), and hsl()/hsla()
-     * colours. This theme's own tokens are authored in oklch(), which is a
-     * valid CSS colour the browser renders correctly everywhere else, but
-     * Mermaid's colour engine cannot parse it and throws, leaving the
-     * diagram unrendered.
-     *
-     * Painting a value onto a 1x1 canvas and reading the rasterised pixel
-     * back converts any colour the browser can render into concrete RGB,
-     * regardless of the colour space it was authored in. That result is
-     * written back onto the same custom property as an inline override, so
-     * mermaid-doodle keeps reading --doodle-* exactly as before; only the
-     * format changes. Re-run on every theme change so the override always
-     * reflects the current theme's tokens rather than a stale reading.
-     */
-    const COLOR_VARS = [
-      '--doodle-accent',
-      '--doodle-node-bg',
-      '--doodle-node-text',
-      '--doodle-alt-bg',
-      '--doodle-alt-border',
-      '--doodle-cluster-bg',
-      '--doodle-cluster-border',
-      '--doodle-note-bg',
-      '--doodle-text',
-      '--doodle-edge-label-bg',
-    ];
-
-    const pixel = document.createElement('canvas').getContext('2d');
-
-    function toRgbString(value: string): string {
-      if (!pixel) return value;
-      pixel.clearRect(0, 0, 1, 1);
-      pixel.fillStyle = value;
-      pixel.fillRect(0, 0, 1, 1);
-      const [r, g, b, a] = pixel.getImageData(0, 0, 1, 1).data;
-      return a === 255
-        ? `rgb(${r}, ${g}, ${b})`
-        : `rgba(${r}, ${g}, ${b}, ${(a / 255).toFixed(3)})`;
-    }
-
-    function syncPalette(): void {
-      const root = document.documentElement;
-      // Clear last theme's inline overrides first: an inline value has
-      // higher priority than theme.css's rule, so leaving it in place would
-      // make the read below see this function's own previous output
-      // instead of the current theme's cascade.
-      for (const name of COLOR_VARS) root.style.removeProperty(name);
-      const computed = getComputedStyle(root);
-      for (const name of COLOR_VARS) {
-        const value = computed.getPropertyValue(name).trim();
-        if (value) root.style.setProperty(name, toRgbString(value));
-      }
-    }
-
-    syncPalette();
     createRenderer().mount();
-    watchTheme(syncPalette);
   }
 </script>
