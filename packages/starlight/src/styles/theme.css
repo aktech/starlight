@@ -87,6 +87,7 @@
 
   /* ── Mermaid diagrams (mermaid-doodle) ──────────────────────────────────── */
   --doodle-accent: var(--nbr-primary);
+  --doodle-font: var(--sl-font);
   --doodle-node-bg: var(--nbr-muted);
   --doodle-node-text: var(--nbr-foreground);
   --doodle-alt-bg: var(--nbr-muted);
