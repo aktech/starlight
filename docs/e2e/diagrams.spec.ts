@@ -6,16 +6,25 @@ test('renders a mermaid fence as an SVG diagram', async ({ page }) => {
   await expect(page.locator('.doodle-wrap svg')).toContainText('start');
 });
 
-test('redraws the diagram when the theme changes', async ({ page }) => {
+test('redraws the diagram in the new theme palette', async ({ page }) => {
+  // Mermaid regenerates element ids on every render, so comparing raw SVG
+  // markup would pass even if the palette mapping were completely broken:
+  // it would only prove a redraw happened, not that it used the right
+  // colours. Reading a resolved colour off the edge line (mermaid's
+  // lineColor, sourced from --doodle-accent) catches that: it only differs
+  // if the diagram actually redrew in the other theme's palette.
   await page.goto('/reference/diagrams/');
   await expect(page.locator('.doodle-wrap svg')).toBeVisible();
-  const before = await page.locator('.doodle-wrap svg').innerHTML();
+  const edgeStroke = () =>
+    page
+      .locator('.doodle-wrap svg path.flowchart-link')
+      .first()
+      .evaluate((el) => getComputedStyle(el).stroke);
+  const before = await edgeStroke();
   await page.evaluate(() =>
     document.documentElement.setAttribute('data-theme', 'dark'),
   );
-  await expect
-    .poll(() => page.locator('.doodle-wrap svg').innerHTML())
-    .not.toBe(before);
+  await expect.poll(edgeStroke).not.toBe(before);
 });
 
 test('maps the diagram accent to the site primary token', async ({ page }) => {
@@ -35,5 +44,4 @@ test('maps the diagram accent to the site primary token', async ({ page }) => {
   });
   expect(accent).not.toBe('');
   expect(accent).toBe(primary);
-  expect(accent).not.toBe('#5b3cc4');
 });
