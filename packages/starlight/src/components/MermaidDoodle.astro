@@ -14,5 +14,7 @@
   import { createRenderer } from 'mermaid-doodle';
   import 'mermaid-doodle/styles.css';
 
-  createRenderer().mount();
+  const renderer = createRenderer();
+  renderer.mount();
+  document.addEventListener('astro:page-load', () => renderer.render());
 </script>
