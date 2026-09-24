@@ -110,7 +110,8 @@ only needs `light`.
   symbol favicon, and a branded multi-column footer on splash pages (home, 404).
   Doc pages with a sidebar end at their content.
 - **Nav tabs** - optional `nav` items render as header tabs and in the mobile
-  drawer. Omit the option and the header stays stock Starlight.
+  drawer. Entries can point at another site (`https://packs.nebari.dev`), which
+  open in a new tab. Omit the option and the header stays stock Starlight.
 - **Search** - Starlight's built-in Pagefind, styled to the Docs theme, ready to
   merge additional pack indexes for portal-wide multisite search.
 
@@ -215,17 +216,6 @@ your build unexpectedly:
 ```jsonc
 { "dependencies": { "@nebari/starlight": "^1.0.0" } }
 ```
-
-### 1.0.0
-
-EffVer macro. Four behaviours change without an opt-in:
-
-1. The footer no longer renders on doc pages — splash pages only.
-2. `lastUpdated` defaults to `true`, so a date appears on pages that had none.
-3. Nav tabs appear only if `nav` is set; absent, the header is byte-identical.
-4. Tables scroll rather than wrap. Long values scroll inside the cell or the
-   table instead of breaking across lines. With JavaScript disabled, a wide
-   table can overflow the page.
 
 ## Releasing
 
