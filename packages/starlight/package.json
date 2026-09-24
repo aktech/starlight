@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "mermaid": "11.17.2",
-    "mermaid-doodle": "file:/Users/aktech/dev/mermaid-doodle"
+    "mermaid-doodle": "0.1.0"
   },
   "peerDependencies": {
     "@astrojs/starlight": ">=0.33.0 <1.0.0",
